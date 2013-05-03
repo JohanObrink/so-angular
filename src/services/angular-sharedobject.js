@@ -1,11 +1,12 @@
 
 (function() {
 
-  var SharedObject = function(socket, path) {
+  var SharedObject = function(socket, path, scope, property) {
     this.socket = socket;
     this.path = path;
-    this.data = {};
-    this.objects = [];
+    this.scope = scope;
+    this.property = property;
+
     this.getObject();
   };
 
@@ -15,32 +16,17 @@
       if(err) {
         //console.log('Error: ', err);
       } else {
-        self.updateObjects(null, data);
+        self.scope[self.property] = data;
+
+        self.scope.$watch(self.property, function(newVal, oldVal, scope) {
+          socket.emit('sharedobject-set', prop, scope[prop]);
+        }, true);
 
         self.socket.on('sharedobject-update', function(data) {
-          console.log('update', self.path, data);
-          self.updateObjects(data);
+          self.scope[self.property] = data;
         });
       }
     });
-  };
-
-  SharedObject.prototype.updateObjects = function(response) {
-    this.objects.forEach(function(o) {
-      if(response && response.data && response.data[o.prop]) {
-        o.scope[o.prop] = response.data;
-      }
-    });
-  };
-
-  SharedObject.prototype.attach = function(scope, prop) {
-    this.objects.push({ scope: scope, prop: prop });
-    var self = this;
-    var socket = this.socket;
-    scope.$watch(prop, function(newVal, oldVal, scope) {
-      console.log('watch', self.path);
-      socket.emit('sharedobject-set', prop, scope[prop]);
-    }, true);
   };
 
 
@@ -50,13 +36,8 @@
     this.objects = {};
   };
 
-  SharedObjectStore.prototype.attach = function(scope, prop, path) {
-
-    if(!this.objects[path]) {
-      console.log('new so', path);
-      this.objects[path] = new SharedObject(this.socket, path);
-    }
-    this.objects[path].attach(scope, prop);
+  SharedObjectStore.prototype.attach = function(scope, property, path) {
+    this.objects[path] = new SharedObject(this.socket, path, scope, property);
   };
 
   var factory = function(socket) {
