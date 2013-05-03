@@ -1,0 +1,5 @@
+components
+node_modules
+*.log
+public/js/*.js
+public/css/*.css

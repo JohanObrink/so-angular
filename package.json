@@ -1,0 +1,27 @@
+{
+  "name": "so-angular",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "3.1.1",
+    "jade": "*",
+    "less-middleware": "*",
+    "sharedobject": "0.0.2",
+    "socket.io": "~0.9.14"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "mocha": "~1.9.0",
+    "grunt-contrib-jshint": "~0.4.0",
+    "grunt-mocha": "~0.3.0",
+    "grunt-contrib-concat": "~0.1.3",
+    "grunt-regarde": "~0.1.1",
+    "chai": "~1.5.0",
+    "sinon": "~1.6.0",
+    "coffee-script": "~1.6.1",
+    "grunt-contrib-less": "~0.5.1"
+  }
+}
