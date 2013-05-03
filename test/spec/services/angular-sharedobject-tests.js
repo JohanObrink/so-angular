@@ -1,13 +1,18 @@
 
 describe('angular-sharedobject', function() {
 
-  var sos, socket;
+  var sos, socket, scope;
 
   beforeEach(function() {
     module('sharedobject', function($provide) {
       socket = {
-        on: function() {},
-        emit: function() {}
+        listeners: {},
+        on: function(event, listener) {
+          this.listeners[event] = listener;
+        },
+        emit: function() {
+
+        }
       };
 
       $provide.factory('socket', function() {
@@ -15,14 +20,25 @@ describe('angular-sharedobject', function() {
       });
     });
 
-    inject(function(SharedObject) {
+    inject(function($rootScope, SharedObject) {
+      scope = $rootScope.$new();
       sos = SharedObject;
     });
   });
 
-  it('works', function() {
+  it('sets up scope', function() {
+    expect(scope).to.exist;
+  });
+
+  it('sets up SharedObjectStore', function() {
     expect(sos).to.exist;
     expect(sos.attach).to.be.a('function');
+  });
+
+  describe('SharedObject', function() {
+
+    
+
   });
 
 });
