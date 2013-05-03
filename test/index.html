@@ -1,0 +1,31 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+  <script src="../node_modules/chai/chai.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../components/angular/angular.js"></script>
+  <script>
+    mocha.setup('bdd');
+    var expect = chai.expect;
+  </script>
+  <script src="../components/bower-angular-mocks-latest/angular-mocks.js"></script>
+
+
+  <!-- dependencies -->
+  <script src="../public/js/so-angular.js"></script>
+  
+  <!-- specs -->
+  <script src="spec/services/angular-sharedobject-tests.js"></script>
+
+  <script>
+    window.onload = function() {
+      mocha.run();
+    }
+  </script>
+</head>
+<body>
+  <div id="mocha"></div>
+</body>
+</html>
