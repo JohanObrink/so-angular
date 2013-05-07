@@ -35,7 +35,7 @@ app.get('/users', user.list);
 
 var server = http.createServer(app);
 
-var io = socket_io.listen(server);
+var io = socket_io.listen(server, { log: false });
 sharedlibrary.setup(io);
 
 server.listen(app.get('port'), function(){

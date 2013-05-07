@@ -9,8 +9,8 @@
     "express": "3.1.1",
     "jade": "*",
     "less-middleware": "*",
-    "sharedobject": "0.0.2",
-    "socket.io": "~0.9.14"
+    "socket.io": "~0.9.14",
+    "sharedobject": "0.0.3"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

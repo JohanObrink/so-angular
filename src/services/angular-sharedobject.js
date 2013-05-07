@@ -1,34 +1,47 @@
 
 (function() {
 
+  'use strict';
+
   var SharedObject = function(socket, path, scope, property) {
     this.socket = socket;
     this.path = path;
     this.scope = scope;
     this.property = property;
+    this.remotelyUpdated = false;
 
     this.getObject();
   };
 
   SharedObject.prototype.getObject = function() {
     var self = this;
-    this.socket.emit('getObject', this.path, true, function(err, data) {
-      if(err) {
-        //console.log('Error: ', err);
-      } else {
-        self.scope[self.property] = data;
-
-        self.scope.$watch(self.property, function(newVal, oldVal, scope) {
-          socket.emit('sharedobject-set', prop, scope[prop]);
-        }, true);
-
-        self.socket.on('sharedobject-update', function(data) {
-          self.scope[self.property] = data;
-        });
-      }
-    });
+    this.socket.emit('sharedobject-connect', this.path, true, angular.bind(this, this.onConnect));
   };
 
+  SharedObject.prototype.onConnect = function(err, data) {
+    this.remotelyUpdated = true;
+    this.scope[this.property] = data[this.property];
+    this.scope.$watch(this.property, angular.bind(this, this.onLocalChange), true);
+    this.socket.on('sharedobject-update', angular.bind(this, this.onRemoteChange));
+  };
+
+  SharedObject.prototype.update = function(property, data) {
+    this.remotelyUpdated = true;
+    this.scope[property] = data[property];
+  };
+
+  SharedObject.prototype.onLocalChange = function(newVal, oldVal, scope) {
+    if(!this.remotelyUpdated) {
+      this.socket.emit('sharedobject-set', this.property, scope[this.property]);
+    }
+    this.remotelyUpdated = false;
+  };
+
+  SharedObject.prototype.onRemoteChange = function(message) {
+    if(this.socket.id !== message.sender) {
+      this.update(this.property, message.data);
+    }
+  };
 
 
   var SharedObjectStore = function(socket) {

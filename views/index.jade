@@ -1,6 +1,18 @@
 extends layout
 
 block content
-  div(ng-app="soApp")
-    div(ng-controller="MusicLibraryCtrl")
+  div.container(ng-app="soApp")
+    div.row(ng-controller="MusicLibraryCtrl")
       {{ library.path }}
+      .span3
+        ul.stations.span3.nav
+          li(ng-repeat="station in library.stations")
+            a(href="#", ng-click="selectStation(station.name)") {{station.name}}
+            ul
+              li(ng-repeat="genre in station.genres")
+                div {{genre.name}}
+                input(type="range", ng-model="genre.priority")
+      .span9
+        ul.wall
+          li(ng-repeat="cover in covers")
+            img(src="{{cover.thumb}}")
