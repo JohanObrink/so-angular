@@ -36,6 +36,10 @@ app.get('/users', user.list);
 var server = http.createServer(app);
 
 var io = socket_io.listen(server, { log: false });
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
 sharedlibrary.setup(io);
 
 server.listen(app.get('port'), function(){

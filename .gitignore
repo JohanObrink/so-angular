@@ -15,5 +15,3 @@ npm-debug.log
 
 components
 node_modules
-public/js/*.js
-public/css/*.css
