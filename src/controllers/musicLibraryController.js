@@ -30,7 +30,7 @@
         } else {
           var genres = $scope.library.stations[$scope.stationName].genres;
           var songs = Object.keys(genres).map(function(k) { return genres[k].songs.slice(0, genres[k].priority); });
-          $scope.covers = weave(songs, 6*6);
+          $scope.covers = weave(songs, 36);
         }
       };
 
