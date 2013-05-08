@@ -3,10 +3,14 @@
 
   'use strict';
   
+  // sumItems
+  // returns the total sum of all items in all arrays
   var sumItems = function(tot, cur) {
     return ((tot instanceof Array) ? tot.length : tot) + cur.length;
   };
 
+  // toWeighted list
+  // constructs an object with information needed for weighted selection from array
   var toWeightedList = function(list) {
     var items = list.slice();
     var len = items.length +1;
@@ -14,10 +18,14 @@
     return { items: items, t: 1, n: len, v: val };
   };
 
+  // sortByVal
+  // returns sorting based on .v property
   var sortByVal = function(w1, w2) {
     return w1.v - w2.v;
   };
 
+  // weave
+  // takes an array of arrays of possibly different lengths and interweaves them evenly
   var weave = function(lists, total) {
 
     if(!total) {
@@ -37,6 +45,7 @@
     return result;
   };
 
+  // register as an angular service
   angular
     .module('soApp')
     .factory('weave', function() { return weave; });
