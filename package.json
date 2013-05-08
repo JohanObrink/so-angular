@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "engines": {
     "node": "0.10.x",
@@ -14,7 +15,8 @@
     "jade": "*",
     "less-middleware": "*",
     "socket.io": "~0.9.14",
-    "sharedobject": "0.0.3"
+    "sharedobject": "0.0.3",
+    "bower": "~0.9.2"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
