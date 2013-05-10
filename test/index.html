@@ -7,6 +7,7 @@
   <script src="../node_modules/chai/chai.js"></script>
   <script src="../node_modules/mocha/mocha.js"></script>
   <script src="../components/angular/angular.js"></script>
+  <script src="../components/underscore/underscore.js"></script>
   <script>
     mocha.setup('bdd');
     var expect = chai.expect;
@@ -18,8 +19,10 @@
   <script src="../public/js/so-angular.js"></script>
   
   <!-- specs -->
-  <script src="spec/services/weaver-tests.js"></script>
   <script src="spec/services/angular-sharedobject-tests.js"></script>
+  <script src="spec/services/weaver-tests.js"></script>
+  <script src="spec/services/hash-tests.js"></script>
+  <script src="spec/services/diff-tests.js"></script>
 
   <script>
     window.onload = function() {
