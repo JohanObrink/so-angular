@@ -27,9 +27,27 @@
     return ret;
   };
 
+  var merge = function(template, override) {
+    for (var name in override) {
+      if (name in template) {
+        if (_.isObject(override[name]) && !_.isArray(override[name])) {
+          template[name] = merge(template[name], override[name]);
+        } else if (!_.isEqual(template[name], override[name])) {
+          template[name] = override[name];
+        }
+      } else {
+        template[name] = override[name];
+      }
+      if(template[name] === undefined) {
+        delete template[name];
+      }
+    }
+    return template;
+  };
+
   // service registration for angular
   angular
     .module('sharedobject')
-    .factory('diff', function() { return { difference: difference }; });
+    .factory('diff', function() { return { difference: difference, merge: merge }; });
 
 })();

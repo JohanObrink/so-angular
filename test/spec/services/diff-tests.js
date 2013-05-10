@@ -1,19 +1,21 @@
 
 describe('diff difference / merge', function() {
 
-  var difference;
+  var difference, merge;
 
   beforeEach(function() {
 
     module('sharedobject');
     inject(function(diff) {
       difference = diff.difference;
+      merge = diff.merge;
     });
 
   });
 
   it('registers correctly with angular', function() {
     expect(difference).to.be.a('function');
+    expect(merge).to.be.a('function');
   });
 
   describe('difference', function() {
@@ -131,4 +133,170 @@ describe('diff difference / merge', function() {
     
   });
 
+  describe('merge', function() {
+
+    it('adds properties', function() {
+      var obj = {
+      };
+      var diff = {
+        foo: 'bar'
+      };
+      var expected = {
+        foo: 'bar'
+      };
+
+      expect(merge(obj, diff)).to.eql(expected);
+    });
+
+    it('preserves unchanged properties', function() {
+      var obj = {
+        baz: true
+      };
+      var diff = {
+        foo: 'bar'
+      };
+      var expected = {
+        foo: 'bar',
+        baz: true
+      };
+
+      expect(merge(obj, diff)).to.eql(expected);
+    });
+
+    it('overwrites changed properties', function() {
+      var obj = {
+        baz: true
+      };
+      var diff = {
+        foo: 'bar',
+        baz: false
+      };
+      var expected = {
+        foo: 'bar',
+        baz: false
+      };
+
+      expect(merge(obj, diff)).to.eql(expected);
+    });
+
+    it('works deeply', function() {
+      var obj = {
+        foo: 'bar',
+        herp: {
+          herp: {
+            herp: 'derp'
+          }
+        },
+        something: {
+          something: {
+            something: 'dark side'
+          }
+        },
+        baz: [ 1, 2, 3 ],
+        active: true
+      };
+      var diff = {
+        foo: 'bar',
+        something: {
+          something: {
+            something: 'all of them'
+          }
+        },
+        herp: {
+          herp: {
+            herp: 'derp'
+          }
+        },
+        baz: [ 1, 2 ],
+        active: false,
+      };
+
+      var expected = {
+        foo: 'bar',
+        herp: {
+          herp: {
+            herp: 'derp'
+          }
+        },
+        something: {
+          something: {
+            something: 'all of them'
+          }
+        },
+        baz: [ 1, 2 ],
+        active: false
+      };
+
+      expect(merge(obj, diff)).to.eql(expected);
+    });
+
+    it('removes deleted properties', function() {
+      var obj = {
+        foo: 'bar',
+        baz: true
+      };
+      var diff = {
+        foo: undefined,
+        baz: false
+      };
+      var expected = {
+        baz: false
+      };
+
+      expect(merge(obj, diff)).to.eql(expected);
+    });
+
+    it('removes deleted properties deeply', function() {
+      var obj = {
+        foo: 'bar',
+        herp: {
+          herp: {
+            herp: 'derp'
+          }
+        },
+        something: {
+          something: {
+            something: 'dark side'
+          }
+        },
+        baz: [ 1, 2, 3 ],
+        active: true
+      };
+      var diff = {
+        foo: 'bar',
+        something: {
+          something: {
+            something: undefined
+          }
+        },
+        herp: {
+          herp: {
+            herp: 'derp'
+          }
+        },
+        baz: [ 1, 2 ],
+        active: false,
+      };
+
+      var expected = {
+        foo: 'bar',
+        herp: {
+          herp: {
+            herp: 'derp'
+          }
+        },
+        something: {
+          something: {
+          }
+        },
+        baz: [ 1, 2 ],
+        active: false
+      };
+      var result = merge(obj, diff);
+
+      expect(result).to.eql(expected);
+    });
+  });
+
 });
+
